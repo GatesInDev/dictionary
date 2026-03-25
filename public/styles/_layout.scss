@@ -17,6 +17,7 @@
     &__inner {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 16px;
         height: 100%;
         max-width: var(--max-width);
@@ -26,6 +27,11 @@
         @include tablet {
             padding: 0 48px;
         }
+    }
+
+    &__search {
+        flex: 1 1 auto;
+        max-width: 480px;
     }
 
     &__brand {
@@ -68,9 +74,9 @@
         }
     }
 
-    // Search field in navbar
+    // Search field in navbar — fills remaining space, centered
     &__search {
-        flex: 1;
+        flex: 1 1 auto;
         max-width: 480px;
 
         .search-input-wrapper {
