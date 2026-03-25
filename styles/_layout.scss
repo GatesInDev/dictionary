@@ -1,0 +1,388 @@
+// ============================================
+// Layout — Clean, spacious, minimal
+// ============================================
+
+// --- Header (ultra-clean) ---
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    z-index: var(--z-header);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 100%;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 24px;
+
+        @include tablet {
+            padding: 0 48px;
+        }
+    }
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--text);
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    &__logo {
+        width: 32px;
+        height: 32px;
+        background: var(--text);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--bg);
+        font-weight: 900;
+        font-size: 0.75rem;
+        letter-spacing: 0.02em;
+    }
+
+    &__title {
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        display: none;
+
+        @include tablet {
+            display: block;
+        }
+
+        span {
+            font-weight: 400;
+        }
+    }
+
+    // Search field in navbar
+    &__search {
+        flex: 1;
+        max-width: 480px;
+
+        .search-input-wrapper {
+            .search-icon {
+                left: 12px;
+            }
+
+            .input {
+                padding: 8px 12px 8px 36px;
+                font-size: 0.8125rem;
+                height: 36px;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-full);
+                border-bottom-width: 1px;
+                background: var(--bg-secondary);
+                transition: all var(--duration-fast) var(--ease);
+
+                &:focus {
+                    border-color: var(--text);
+                    background: var(--bg);
+                }
+
+                &::placeholder {
+                    font-size: 0.8125rem;
+                }
+            }
+
+            .search-clear {
+                right: 8px;
+            }
+        }
+    }
+
+    &__nav-mobile {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    &__link {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-secondary);
+        border-radius: var(--radius-full);
+        transition: all var(--duration-fast) var(--ease);
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-family: var(--font);
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        &:hover {
+            color: var(--text);
+        }
+
+        &--active {
+            color: var(--text);
+            background: var(--bg-secondary);
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 100%;
+    }
+
+    &__theme-toggle {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-full);
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all var(--duration-fast) var(--ease);
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        &:hover {
+            color: var(--text);
+        }
+    }
+}
+
+// --- Alphabet Bar (below header) ---
+.alphabet-bar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    z-index: calc(var(--z-header) - 1);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 12px 24px;
+
+        @include tablet {
+            padding: 12px 48px;
+            justify-content: center;
+            gap: 6px;
+        }
+    }
+
+    &__letter {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        font-family: var(--font);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--text-muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: all var(--duration-fast) var(--ease);
+        border-radius: var(--radius-sm);
+
+        &:hover {
+            color: var(--text);
+            background: var(--bg-secondary);
+        }
+
+        &--active {
+            color: var(--bg);
+            background: var(--text);
+            font-weight: 900;
+
+            &:hover {
+                color: var(--bg);
+                background: var(--text);
+                opacity: 0.9;
+            }
+        }
+    }
+}
+
+// --- Drawer Overlay ---
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: calc(var(--z-header) + 10);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--duration) var(--ease), visibility var(--duration) var(--ease);
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+// --- Navigation Drawer ---
+.nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    max-width: 85vw;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+    z-index: calc(var(--z-header) + 11);
+    transform: translateX(100%);
+    transition: transform var(--duration) var(--ease), background var(--duration) var(--ease);
+    display: flex;
+    flex-direction: column;
+
+    &.open {
+        transform: translateX(0);
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    &__title {
+        font-size: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        color: var(--text);
+    }
+
+    &__links {
+        display: flex;
+        flex-direction: column;
+        padding: 24px;
+        gap: 8px;
+
+        .header__link {
+            justify-content: flex-start;
+            padding: 12px 16px;
+            font-size: 0.875rem;
+
+            svg {
+                width: 18px;
+                height: 18px;
+                margin-right: 8px;
+                color: var(--text-muted);
+            }
+
+            &:hover svg,
+            &--active svg {
+                color: var(--text);
+            }
+        }
+    }
+}
+
+// --- Term Grid ---
+.term-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include desktop {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+// --- Footer ---
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    margin-top: auto;
+
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+
+        @include tablet {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+
+    &__text {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    &__links {
+        display: flex;
+        gap: 24px;
+
+        a {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+
+            &:hover {
+                color: var(--text);
+            }
+        }
+    }
+}
