@@ -1,0 +1,20 @@
+{
+    "name": "se-dictionary",
+    "version": "1.0.0",
+    "description": "Software Engineering Dictionary",
+    "type": "module",
+    "scripts": {
+        "dev": "node server.js",
+        "start": "node server.js",
+        "vercel:dev": "vercel dev",
+        "build:css": "sass public/styles/main.scss:public/styles/main.css --no-source-map",
+        "watch:css": "sass public/styles/main.scss:public/styles/main.css --watch --no-source-map"
+    },
+    "dependencies": {
+        "express": "^4.21.2",
+        "mongodb": "^6.15.0"
+    },
+    "devDependencies": {
+        "sass": "^1.98.0"
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/dictionary/api/terms/search", "destination": "/api/terms/search" },
+    { "source": "/dictionary/api/terms/:id",    "destination": "/api/terms/[id]" },
+    { "source": "/dictionary/api/terms",         "destination": "/api/terms/index" },
+    { "source": "/dictionary/api/categories",    "destination": "/api/categories" },
+    { "source": "/dictionary/api/stats",         "destination": "/api/stats" },
+    { "source": "/dictionary/api/auth/login",    "destination": "/api/auth/login" },
+    { "source": "/dictionary/(.*)",              "destination": "/public/$1" },
+    { "source": "/dictionary",                   "destination": "/public/index.html" }
+  ]
+}
