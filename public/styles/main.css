@@ -975,7 +975,9 @@ code {
   overflow: hidden;
 }
 .term-card:hover {
-  background: var(--bg-secondary);
+  background: var(--surface);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 .term-card__header {
   display: flex;
@@ -1154,6 +1156,90 @@ code {
   font-size: 1.0625rem;
   color: var(--text-secondary);
   line-height: 1.8;
+}
+.detail-content__markdown {
+  font-size: 1.0625rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.detail-content__markdown h1, .detail-content__markdown h2, .detail-content__markdown h3, .detail-content__markdown h4 {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 32px 0 12px;
+}
+.detail-content__markdown h1:first-child, .detail-content__markdown h2:first-child, .detail-content__markdown h3:first-child, .detail-content__markdown h4:first-child {
+  margin-top: 0;
+}
+.detail-content__markdown h1 {
+  font-size: 1.5rem;
+}
+.detail-content__markdown h2 {
+  font-size: 1.25rem;
+}
+.detail-content__markdown h3 {
+  font-size: 1.0625rem;
+}
+.detail-content__markdown p {
+  margin: 0 0 16px;
+}
+.detail-content__markdown p:last-child {
+  margin-bottom: 0;
+}
+.detail-content__markdown strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.detail-content__markdown em {
+  font-style: italic;
+}
+.detail-content__markdown a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.detail-content__markdown a:hover {
+  opacity: 0.7;
+}
+.detail-content__markdown code {
+  font-family: "Courier New", monospace;
+  font-size: 0.875em;
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text);
+}
+.detail-content__markdown pre {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 0 0 16px;
+}
+.detail-content__markdown pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+.detail-content__markdown ul, .detail-content__markdown ol {
+  padding-left: 24px;
+  margin: 0 0 16px;
+}
+.detail-content__markdown ul li, .detail-content__markdown ol li {
+  margin-bottom: 6px;
+}
+.detail-content__markdown blockquote {
+  border-left: 3px solid var(--border);
+  padding: 4px 0 4px 20px;
+  margin: 0 0 16px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.detail-content__markdown hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
 }
 
 .detail-related {

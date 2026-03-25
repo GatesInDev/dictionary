@@ -51,12 +51,12 @@ export function initTermCardListeners(container, terms = []) {
           bodyHtml: `
             <div class="term-detail-modal">
               <div class="badge badge--primary" style="margin-bottom: 16px;">${term.category}</div>
-              <p class="term-detail-modal__def" style="margin-bottom: 24px; line-height: 1.6;">${term.definition}</p>
+              <p class="term-detail-modal__def" style="margin-bottom: 24px; line-height: 1.6; color: var(--text-secondary);">${term.shortDefinition}</p>
               ${term.relatedTerms && term.relatedTerms.length > 0 ? `
                 <div style="padding-top: 16px; border-top: 1px solid var(--border);">
                   <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px;">Termos Relacionados</h4>
                   <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                    ${term.relatedTerms.map(tag => `<span class="tag tag--sm">${tag}</span>`).join('')}
+                    ${term.relatedTerms.map(tag => `<span class="tag tag--sm" style="cursor:default;pointer-events:none;">${tag}</span>`).join('')}
                   </div>
                 </div>
               ` : ''}

@@ -200,7 +200,9 @@
     overflow: hidden;
 
     &:hover {
-        background: var(--bg-secondary);
+        background: var(--surface);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     }
 
     &__header {
@@ -402,6 +404,76 @@
         font-size: 1.0625rem;
         color: var(--text-secondary);
         line-height: 1.8;
+    }
+
+    // Markdown-rendered definition
+    &__markdown {
+        font-size: 1.0625rem;
+        color: var(--text-secondary);
+        line-height: 1.8;
+
+        h1, h2, h3, h4 {
+            color: var(--text);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin: 32px 0 12px;
+            &:first-child { margin-top: 0; }
+        }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+        h3 { font-size: 1.0625rem; }
+
+        p { margin: 0 0 16px; }
+        p:last-child { margin-bottom: 0; }
+
+        strong { color: var(--text); font-weight: 700; }
+        em { font-style: italic; }
+
+        a {
+            color: var(--text);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            &:hover { opacity: 0.7; }
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875em;
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text);
+        }
+
+        pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 20px 24px;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 0 0 16px;
+            code { background: none; padding: 0; font-size: 0.875rem; }
+        }
+
+        ul, ol {
+            padding-left: 24px;
+            margin: 0 0 16px;
+            li { margin-bottom: 6px; }
+        }
+
+        blockquote {
+            border-left: 3px solid var(--border);
+            padding: 4px 0 4px 20px;
+            margin: 0 0 16px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 24px 0;
+        }
     }
 }
 

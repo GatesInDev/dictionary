@@ -137,7 +137,7 @@ function openTermEditor(term = null, categories = [], onSave) {
         <span class="term-editor__title">${isEdit ? 'Editar Termo' : 'Novo Termo'}</span>
         <div class="term-editor__actions">
           <button class="btn btn--ghost" id="editor-cancel-btn">${icons.x} Cancelar</button>
-          <button class="btn btn--primary" id="editor-save-btn">${icons.check || '✓'} Salvar</button>
+          <button class="btn btn--primary" id="editor-save-btn">${icons.check} Salvar</button>
         </div>
       </div>
 
@@ -170,7 +170,7 @@ function openTermEditor(term = null, categories = [], onSave) {
 
         <!-- Center: markdown textarea -->
         <div class="term-editor-overlay__editor">
-          <div class="term-editor-overlay__pane-label">✏️ Markdown</div>
+          <div class="term-editor-overlay__pane-label">${icons.pencil} Markdown</div>
           <textarea class="term-editor-overlay__textarea" id="editor-md"
                     placeholder="# Sobre este termo&#10;&#10;Escreva a definição completa em **Markdown**..."
           >${term ? escapeHtml(term.definition) : ''}</textarea>
@@ -178,7 +178,7 @@ function openTermEditor(term = null, categories = [], onSave) {
 
         <!-- Right: live preview -->
         <div class="term-editor-overlay__preview" id="editor-preview">
-          <div class="term-editor-overlay__pane-label" style="margin: -32px -40px 24px; padding: 12px 40px;">👁️ Preview</div>
+          <div class="term-editor-overlay__pane-label" style="margin: -32px -40px 24px; padding: 12px 40px;">${icons.eye} Preview</div>
           <div id="editor-preview-content"></div>
         </div>
       </div>

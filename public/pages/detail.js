@@ -6,6 +6,57 @@ import { getTerm, getTerms } from '../scripts/api.js';
 import { icons, formatDate } from '../scripts/utils.js';
 import { isFavorite, toggleFavorite } from '../scripts/favorites.js';
 
+// Minimal markdown → safe HTML renderer
+function renderMarkdown(raw) {
+  if (!raw) return '';
+  const escaped = raw
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const lines = escaped.split('\n');
+  const out = [];
+  let inCode = false;
+
+  for (const line of lines) {
+    // Fenced code block toggle
+    if (line.startsWith('```')) { inCode = !inCode; if (inCode) { out.push('<pre><code>'); } else { out.push('</code></pre>'); } continue; }
+    if (inCode) { out.push(line + '\n'); continue; }
+
+    // Headings
+    if (/^### /.test(line)) { out.push(`<h3>${inline(line.slice(4))}</h3>`); continue; }
+    if (/^## /.test(line))  { out.push(`<h2>${inline(line.slice(3))}</h2>`); continue; }
+    if (/^# /.test(line))   { out.push(`<h1>${inline(line.slice(2))}</h1>`); continue; }
+    // Blockquote
+    if (/^&gt; /.test(line)) { out.push(`<blockquote>${inline(line.slice(5))}</blockquote>`); continue; }
+    // HR
+    if (/^---+$/.test(line.trim())) { out.push('<hr>'); continue; }
+    // List items
+    if (/^\s*[-*] /.test(line)) { out.push(`<li>${inline(line.replace(/^\s*[-*] /, ''))}</li>`); continue; }
+    if (/^\s*\d+\. /.test(line)) { out.push(`<li>${inline(line.replace(/^\s*\d+\.\s*/, ''))}</li>`); continue; }
+    // Blank line = paragraph break
+    if (line.trim() === '') { out.push('</p><p>'); continue; }
+    // Default: inline content
+    out.push(inline(line) + ' ');
+  }
+
+  let html = '<p>' + out.join('') + '</p>';
+  // Wrap consecutive <li> in <ul>
+  html = html.replace(/(<li>[\s\S]*?<\/li>\s*)+/g, m => `<ul>${m}</ul>`);
+  // Clean up empty paragraphs
+  html = html.replace(/<p>\s*<\/p>/g, '');
+  return html;
+}
+
+function inline(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+}
+
 export async function renderDetailPage(termId) {
   try {
     const term = await getTerm(termId);
@@ -44,7 +95,7 @@ export async function renderDetailPage(termId) {
 
               <div class="detail-content__section">
                 <div class="detail-content__label">Definição Completa</div>
-                <p class="detail-content__text">${term.definition}</p>
+                <div class="detail-content__text detail-content__markdown">${renderMarkdown(term.definition)}</div>
               </div>
 
               ${term.relatedTerms && term.relatedTerms.length > 0 ? `
