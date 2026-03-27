@@ -1,7 +1,3 @@
-// ============================================
-// Login Page (PT-BR)
-// ============================================
-
 import { login, isAuthenticated } from '../scripts/auth.js';
 import { icons, escapeHtml } from '../scripts/utils.js';
 
@@ -70,8 +66,9 @@ export function initLoginListeners() {
       window.location.hash = '#/admin';
     } else {
       errorEl.innerHTML = `<div class="error-message">${escapeHtml(result.error)}</div>`;
-      document.getElementById('login-password').value = '';
-      document.getElementById('login-password').focus();
+      const pwInput = document.getElementById('login-password');
+      pwInput.value = '';
+      pwInput.focus();
     }
   });
 }

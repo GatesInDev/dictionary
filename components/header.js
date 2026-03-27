@@ -1,7 +1,3 @@
-// ============================================
-// Header — Nav with search + alphabet strip (PT-BR)
-// ============================================
-
 import { icons } from '../scripts/utils.js';
 import { toggleTheme, initTheme } from '../scripts/theme.js';
 import { isAuthenticated, logout } from '../scripts/auth.js';
@@ -34,7 +30,6 @@ export function renderHeader() {
           </div>
         </div>
 
-        <!-- Navigation & Actions (Universal) -->
         <div class="header__actions">
           <button class="header__theme-toggle" id="theme-toggle" aria-label="Alternar tema"></button>
           <button class="btn btn--ghost btn--icon header__mobile-menu" id="drawer-btn" aria-label="Menu">
@@ -44,7 +39,6 @@ export function renderHeader() {
       </div>
     </header>
 
-    <!-- Alphabet strip below header -->
     <div class="alphabet-bar" id="alphabet-bar">
       <div class="alphabet-bar__inner">
         <button class="alphabet-bar__letter alphabet-bar__letter--active" data-letter="ALL">Todos</button>
@@ -55,10 +49,8 @@ export function renderHeader() {
       </div>
     </div>
 
-    <!-- Drawer Overlay -->
     <div class="drawer-overlay" id="drawer-overlay"></div>
 
-    <!-- Navigation Drawer -->
     <aside class="nav-drawer" id="nav-drawer">
       <div class="nav-drawer__header">
         <div class="nav-drawer__title">Menu</div>
@@ -93,7 +85,6 @@ export function initHeaderListeners() {
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 
-  // Drawer logic
   const drawerBtn = document.getElementById('drawer-btn');
   const drawerCloseBtn = document.getElementById('drawer-close');
   const navDrawer = document.getElementById('nav-drawer');
@@ -102,7 +93,7 @@ export function initHeaderListeners() {
   const openDrawer = () => {
     navDrawer?.classList.add('open');
     drawerOverlay?.classList.add('open');
-    document.body.style.overflow = 'hidden'; // prevent background scrolling
+    document.body.style.overflow = 'hidden';
   };
 
   const closeDrawer = () => {
@@ -115,7 +106,6 @@ export function initHeaderListeners() {
   if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
   if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
 
-  // Auto-close drawer on any link/action click inside it
   document.querySelectorAll('[data-cmd="close-drawer"]').forEach(el => {
     el.addEventListener('click', closeDrawer);
   });

@@ -1,5 +1,3 @@
-// GET /api/terms/search?q=... — prioritised search (title > tags > body)
-
 import { getDb, col, normalize } from '../_db.js';
 
 function matchTier(t, q) {
@@ -52,6 +50,6 @@ export default async function handler(req, res) {
 
         return res.json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }

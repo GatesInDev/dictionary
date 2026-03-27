@@ -1,7 +1,3 @@
-// ============================================
-// Admin Dashboard (PT-BR)
-// ============================================
-
 import { getTerms, searchTerms, addTerm, updateTerm, deleteTerm, getCategories, fetchExternalDefinition } from '../scripts/api.js';
 import { isAuthenticated } from '../scripts/auth.js';
 import { debounce } from '../scripts/search.js';
@@ -73,7 +69,7 @@ function renderAdminRow(term) {
   return `
     <tr data-row-id="${term.id}">
       <td class="admin-table__term">${escapeHtml(term.term)}</td>
-      <td><span class="badge badge--primary">${term.category}</span></td>
+      <td><span class="badge badge--primary">${escapeHtml(term.category)}</span></td>
       <td class="admin-table__definition">${escapeHtml(term.shortDefinition)}</td>
       <td class="admin-table__actions">
         <button class="btn btn--ghost btn--sm edit-btn" data-edit-id="${term.id}">
@@ -87,48 +83,29 @@ function renderAdminRow(term) {
   `;
 }
 
-// ── Full-screen Markdown Editor ────────────────────────────────────────────────
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^\s*[-*] (.+)$/gm, '<li>$1</li>')
+    .replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)(?!\s*<li>)/g, '<ul>$1</ul>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\n\n(?!<[hHuUoObBpP])/g, '</p><p>')
+    .replace(/^(?!<[hHuUoObBpP<])/m, '<p>')
+    + '</p>';
+}
 
-/**
- * Open the full-screen editor overlay.
- * @param {Object|null} term  Existing term to edit, or null for a new one.
- * @param {string[]}    categories  List of available categories.
- * @param {Function}    onSave  Async callback(data) called when user clicks Save.
- */
 function openTermEditor(term = null, categories = [], onSave) {
   const cats = [...new Set(['Architecture', 'Testing', 'DevOps', 'Design Patterns', 'Agile', ...categories])].sort();
   const isEdit = !!term;
-
-  // Simple markdown → HTML renderer (no external lib needed)
-  function renderMarkdown(md) {
-    return md
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      // Headings
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-      // Bold / italic
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/_(.+?)_/g, '<em>$1</em>')
-      // Inline code
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      // Blockquote
-      .replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>')
-      // Unordered list items
-      .replace(/^\s*[-*] (.+)$/gm, '<li>$1</li>')
-      // Ordered list items
-      .replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>')
-      // Wrap consecutive <li> in <ul>
-      .replace(/(<li>[\s\S]*?<\/li>)(?!\s*<li>)/g, '<ul>$1</ul>')
-      // Horizontal rule
-      .replace(/^---$/gm, '<hr>')
-      // Paragraphs — blank-line separated blocks that are not block elements
-      .replace(/\n\n(?!<[hHuUoObBpP])/g, '</p><p>')
-      .replace(/^(?!<[hHuUoObBpP<])/m, '<p>')
-      + '</p>';
-  }
-
   const overlayId = 'term-editor-overlay';
 
   const html = `
@@ -142,7 +119,6 @@ function openTermEditor(term = null, categories = [], onSave) {
       </div>
 
       <div class="term-editor-overlay__body">
-        <!-- Left: metadata fields -->
         <div class="term-editor-overlay__meta">
           <div class="input-group">
             <label for="editor-term">Nome do Termo</label>
@@ -152,7 +128,7 @@ function openTermEditor(term = null, categories = [], onSave) {
           <div class="input-group">
             <label for="editor-category">Categoria</label>
             <select id="editor-category" class="select">
-              ${cats.map(c => `<option value="${c}" ${term && term.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+              ${cats.map(c => `<option value="${escapeHtml(c)}" ${term && term.category === c ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('')}
             </select>
           </div>
           <div class="input-group">
@@ -164,11 +140,10 @@ function openTermEditor(term = null, categories = [], onSave) {
             <label for="editor-related">Termos Relacionados <span style="font-weight:400;text-transform:none;">(separados por vírgula)</span></label>
             <input type="text" id="editor-related" class="input"
                    placeholder="Ex: REST, API, Microservices"
-                   value="${term ? (term.relatedTerms || []).join(', ') : ''}" />
+                   value="${term ? escapeHtml((term.relatedTerms || []).join(', ')) : ''}" />
           </div>
         </div>
 
-        <!-- Center: markdown textarea -->
         <div class="term-editor-overlay__editor">
           <div class="term-editor-overlay__pane-label">${icons.pencil} Markdown</div>
           <textarea class="term-editor-overlay__textarea" id="editor-md"
@@ -176,7 +151,6 @@ function openTermEditor(term = null, categories = [], onSave) {
           >${term ? escapeHtml(term.definition) : ''}</textarea>
         </div>
 
-        <!-- Right: live preview -->
         <div class="term-editor-overlay__preview" id="editor-preview">
           <div class="term-editor-overlay__pane-label" style="margin: -32px -40px 24px; padding: 12px 40px;">${icons.eye} Preview</div>
           <div id="editor-preview-content"></div>
@@ -185,13 +159,11 @@ function openTermEditor(term = null, categories = [], onSave) {
     </div>
   `;
 
-  // Inject overlay into body
   const container = document.createElement('div');
   container.innerHTML = html;
   const overlay = container.firstElementChild;
   document.body.appendChild(overlay);
 
-  // Live preview update
   const mdArea = overlay.querySelector('#editor-md');
   const previewContent = overlay.querySelector('#editor-preview-content');
 
@@ -201,13 +173,11 @@ function openTermEditor(term = null, categories = [], onSave) {
   updatePreview();
   mdArea.addEventListener('input', updatePreview);
 
-  // Close / cancel
   function closeEditor() {
     overlay.remove();
   }
   overlay.querySelector('#editor-cancel-btn').addEventListener('click', closeEditor);
 
-  // Save
   overlay.querySelector('#editor-save-btn').addEventListener('click', async () => {
     const saveBtn = overlay.querySelector('#editor-save-btn');
     const data = {
@@ -235,13 +205,10 @@ function openTermEditor(term = null, categories = [], onSave) {
   });
 }
 
-// ── Admin Listeners ────────────────────────────────────────────────────────────
-
 export async function initAdminListeners() {
   if (!isAuthenticated()) return;
   const categories = await getCategories();
 
-  // Header search
   const searchInput = document.getElementById('header-search-input');
   const searchClear = document.getElementById('header-search-clear');
 
@@ -271,7 +238,6 @@ export async function initAdminListeners() {
     });
   }
 
-  // Add new term
   document.getElementById('add-term-btn')?.addEventListener('click', () => {
     openTermEditor(null, categories, async (data) => {
       await addTerm(data);
@@ -280,7 +246,6 @@ export async function initAdminListeners() {
     });
   });
 
-  // Table row actions (edit / delete)
   document.getElementById('admin-tbody')?.addEventListener('click', async (e) => {
     const editBtn = e.target.closest('.edit-btn');
     const deleteBtn = e.target.closest('.delete-btn');
@@ -314,7 +279,6 @@ export async function initAdminListeners() {
     }
   });
 
-  // Fetch external
   document.getElementById('fetch-external-btn')?.addEventListener('click', () => {
     const suggestions = ['CQRS', 'Event Sourcing', 'Monolith', 'E2E Testing', 'Factory Pattern'];
     showModal({
@@ -325,7 +289,7 @@ export async function initAdminListeners() {
           <input type="text" id="external-term" class="input" placeholder="Ex: CQRS" />
         </div>
         <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 12px;">
-          Sugestões: ${suggestions.join(', ')}
+          Sugestões: ${escapeHtml(suggestions.join(', '))}
         </p>
       `,
       confirmText: 'Buscar e Salvar',
@@ -340,7 +304,7 @@ export async function initAdminListeners() {
           const result = await fetchExternalDefinition(termName);
           if (result.success) {
             await addTerm(result.data);
-            showToast(`"${result.data.term}" adicionado!`, 'success');
+            showToast(`"${escapeHtml(result.data.term)}" adicionado!`, 'success');
             refreshAdmin();
           } else {
             showToast(result.error, 'warning');
