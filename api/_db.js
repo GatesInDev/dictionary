@@ -34,3 +34,5 @@ export function normalize(doc) {
     const { _id, ...rest } = doc;
     return { id: String(_id), ...rest };
 }
+
+export const COLS = COLLECTIONS;

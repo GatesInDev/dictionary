@@ -1,7 +1,3 @@
-// ============================================
-// Login Page (PT-BR)
-// ============================================
-
 import { login, isAuthenticated } from '../scripts/auth.js';
 import { icons, escapeHtml } from '../scripts/utils.js';
 
